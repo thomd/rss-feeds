@@ -5,12 +5,12 @@ import { FeedConfig } from "./config";
 import { FeedItem } from "./validateItems";
 
 /**
- * Generate an RSS 2.0 feed file and write it to public/<feed-id>/rss.xml.
+ * Generate an RSS 2.0 feed file and write it to _site/<feed-id>/rss.xml.
  */
 export function generateRSS(
   feed: FeedConfig,
   items: FeedItem[],
-  outputDir = "public"
+  outputDir = "_site"
 ): string {
   const feedInstance = new RSS({
     title: feed.name,

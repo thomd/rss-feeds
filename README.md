@@ -12,9 +12,9 @@ GitHub Actions fetches the configured pages every 6 hours, sends the cleaned HTM
 2. **Clean** — scripts, ads, navbars, and footers are removed; content is truncated to fit LLM token limits
 3. **Extract** — the LLM analyzes the HTML and returns a structured JSON array of feed items (`title`, `link`, `description`, `pubDate`)
 4. **Validate** — items are validated with a strict Zod schema; invalid entries are skipped
-5. **Publish** — valid items are written to `public/<feed-id>/rss.xml` and committed back to the repo
+5. **Publish** — valid items are written to `_site/<feed-id>/rss.xml` and deployed to GitHub Pages via GitHub Actions
 
-GitHub Pages serves the `public/` folder, making every feed publicly accessible.
+GitHub Actions uploads the `_site/` folder as a Pages artifact and deploys it directly — no files are committed back to the repo.
 
 ---
 
@@ -41,10 +41,8 @@ pnpm install
 ### 3. Enable GitHub Pages
 
 1. Go to your repository → **Settings** → **Pages**
-2. Under **Build and deployment**, select:
-   - Source: **Deploy from a branch**
-   - Branch: `main` / `/(root)` → change folder to `/public`
-3. Click **Save**
+2. Under **Build and deployment**, select **Source: GitHub Actions**
+3. No folder selection needed — the workflow uploads `_site/` as the Pages artifact automatically
 
 Your feeds will be live at:
 ```
@@ -142,7 +140,7 @@ rss-feeds/
 │   ├── callLLM.ts             # GitHub Models API client
 │   ├── validateItems.ts       # Zod schema for feed items
 │   └── generateRSS.ts         # RSS 2.0 file writer
-├── public/                    # Generated feeds (committed, served by Pages)
+├── _site/                     # Generated feeds (not committed; deployed via Actions artifact)
 │   └── <feed-id>/
 │       └── rss.xml
 ├── feeds.yaml                 # Feed configuration
