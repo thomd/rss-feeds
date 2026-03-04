@@ -37,7 +37,7 @@ async function main(): Promise<void> {
       }
 
       // Step 3: Validate extracted items
-      const items = validateItems(rawItems);
+      const items = validateItems(rawItems).slice(0, feed.maxItems);
 
       // Step 4: For selector-based feeds, summarize descriptions via LLM
       if (feed.selectors && items.length > 0) {

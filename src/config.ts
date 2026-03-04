@@ -16,6 +16,7 @@ const FeedSchema = z.object({
   url: z.string().url(),
   prompt: z.string().optional(),
   selectors: SelectorsSchema.optional(),
+  maxItems: z.number().int().positive().default(10),
 });
 
 const ConfigSchema = z.object({
