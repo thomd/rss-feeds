@@ -41,6 +41,10 @@ jobs:
           # GITHUB_TOKEN is automatically provided by Actions.
           # It is used to authenticate with the GitHub Models API.
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Override the model by setting a GITHUB_MODEL repository variable.
+          # Default: gpt-4o-mini (Low tier, 8k input tokens).
+          # Other options: gpt-4o, gpt-4.1, Llama-3.3-70B-Instruct, Mistral-Large-2411
+          GITHUB_MODEL: ${{ vars.GITHUB_MODEL }}
         run: pnpm run generate
 
       - name: Upload Pages artifact
