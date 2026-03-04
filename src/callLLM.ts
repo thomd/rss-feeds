@@ -2,7 +2,7 @@ import OpenAI from "openai";
 import { RawFeedItem } from "./validateItems";
 
 const MAX_RETRIES = 3;
-const MODEL = process.env.GITHUB_MODEL ?? "gpt-4o-mini";
+const MODEL = process.env.GITHUB_MODEL || "gpt-4o-mini";
 
 const SYSTEM_PROMPT = `You are an expert HTML content extractor that identifies RSS feed items from webpage HTML.
 
