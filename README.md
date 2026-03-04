@@ -25,7 +25,7 @@ GitHub Pages serves the `public/` folder, making every feed publicly accessible.
 ```bash
 git clone https://github.com/<your-username>/rss-feeds.git
 cd rss-feeds
-npm install
+pnpm install
 ```
 
 ### 2. Required Secrets
@@ -35,7 +35,7 @@ npm install
 > **Note:** If you run the generator locally, set `GITHUB_TOKEN` to a personal access token with `models:read` scope:
 > ```bash
 > export GITHUB_TOKEN=ghp_...
-> npm run generate
+> pnpm run generate
 > ```
 
 ### 3. Enable GitHub Pages
