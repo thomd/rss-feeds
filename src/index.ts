@@ -42,6 +42,17 @@ async function main(): Promise<void> {
         console.warn(
           `[${feed.id}] WARNING: No valid items extracted — feed will be empty`
         );
+      } else {
+        console.log(`[${feed.id}] ${items.length} valid item(s):`);
+        for (const [i, item] of items.entries()) {
+          console.log(`  [${i + 1}] ${item.title}`);
+          console.log(`       link:    ${item.link}`);
+          if (item.pubDate) {
+            console.log(`       pubDate: ${item.pubDate}`);
+          }
+          const preview = item.description.replace(/\s+/g, " ").slice(0, 120);
+          console.log(`       desc:    ${preview}${item.description.length > 120 ? "…" : ""}`);
+        }
       }
 
       // Step 4: Generate and write the RSS file
