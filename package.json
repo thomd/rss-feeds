@@ -1,0 +1,26 @@
+{
+  "name": "rss-feeds",
+  "version": "1.0.0",
+  "description": "Automatically generate RSS feeds from public webpages using GitHub Models LLM",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "generate": "ts-node src/index.ts",
+    "lint": "eslint src --ext .ts"
+  },
+  "dependencies": {
+    "axios": "^1.7.9",
+    "cheerio": "^1.0.0",
+    "js-yaml": "^4.1.0",
+    "openai": "^4.77.0",
+    "rss": "^1.2.2",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^22.10.10",
+    "@types/rss": "^0.0.32",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
+  }
+}

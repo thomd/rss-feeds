@@ -1,0 +1,4 @@
+feeds:
+  - id: keycloak-release-notes
+    name: Keycloak Release Notes
+    url: https://www.keycloak.org/docs/latest/release_notes/index.html

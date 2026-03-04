@@ -1,0 +1,57 @@
+name: Generate RSS Feeds
+
+on:
+  schedule:
+    # Run every 6 hours
+    - cron: "0 */6 * * *"
+  workflow_dispatch: # Allow manual triggering
+
+permissions:
+  contents: write # Required to push updated feeds back to the repo
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # Fetch full history so git push works correctly
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: latest
+          run_install: false
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate RSS feeds
+        env:
+          # GITHUB_TOKEN is automatically provided by Actions.
+          # It is used to authenticate with the GitHub Models API.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm run generate
+
+      - name: Commit and push updated feeds
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Only commit if there are actual changes to public/
+          if git diff --quiet HEAD -- public/; then
+            echo "No changes to feeds — skipping commit."
+          else
+            git add public/
+            # [skip ci] prevents this commit from re-triggering the workflow
+            git commit -m "chore: update RSS feeds [skip ci]"
+            git push
+          fi
