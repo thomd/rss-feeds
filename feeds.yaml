@@ -9,26 +9,15 @@ feeds:
       The item description must be the release summary or first paragraph of that version's section.
       Do not create items for sub-sections, individual bug fixes, or individual features within a release.
 
-  - id: helm-releases
-    name: Helm Releases
-    url: https://github.com/helm/helm/releases
-    prompt: >
-      Each RSS item must represent exactly one Helm release.
-      The item title must be the release tag name (e.g. "v3.17.1").
-      The item link must be the URL to that specific release page on GitHub.
-      The item description must be the release notes or changelog summary for that release.
-      Do not create items for individual commits, pull requests, or contributors.
-
 # Example: use explicit CSS selectors instead of LLM extraction.
 # Define 'selectors' when the page structure is stable and the LLM results are unsatisfactory.
 # 'selectors' and 'prompt' are mutually exclusive — if 'selectors' is present, the LLM is skipped.
 #
-#  - id: example-selector-feed
-#    name: Example Feed (CSS selectors)
-#    url: https://example.com/news
-#    selectors:
-#      items: "article.news-item"         # repeated container element per item
-#      title: "h2.title"                  # title text (relative to items)
-#      link: "a.read-more"               # href source (relative to items)
-#      description: "p.summary"          # description text (relative to items)
-#      pubDate: "time"                    # date element — uses datetime attr if present (optional)
+  - id: keycloak-release-notes-css-selectors
+    name: Keycloak Release Notes CSS Selectors
+    url: https://www.keycloak.org/docs/latest/release_notes/index.html
+    selectors:
+      items: ".sect1"
+      title: ".sect1 h2"
+      link: ".sect1 h2 a"
+      description: ".sect1 .sectionbody"
