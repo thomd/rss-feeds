@@ -8,3 +8,13 @@ feeds:
       The item link must point to the anchor for that version on the page.
       The item description must be the release summary or first paragraph of that version's section.
       Do not create items for sub-sections, individual bug fixes, or individual features within a release.
+
+  - id: helm-releases
+    name: Helm Releases
+    url: https://github.com/helm/helm/releases
+    prompt: >
+      Each RSS item must represent exactly one Helm release.
+      The item title must be the release tag name (e.g. "v3.17.1").
+      The item link must be the URL to that specific release page on GitHub.
+      The item description must be the release notes or changelog summary for that release.
+      Do not create items for individual commits, pull requests, or contributors.

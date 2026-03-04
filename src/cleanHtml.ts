@@ -1,7 +1,7 @@
 import * as cheerio from "cheerio";
 
 /** Maximum character length of cleaned HTML sent to the LLM. */
-const MAX_CHARS = 12_000;
+const MAX_CHARS = 80_000;
 
 /**
  * Remove noise elements and return cleaned HTML string.
