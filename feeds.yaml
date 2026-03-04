@@ -2,3 +2,9 @@ feeds:
   - id: keycloak-release-notes
     name: Keycloak Release Notes
     url: https://www.keycloak.org/docs/latest/release_notes/index.html
+    prompt: >
+      Each RSS item must represent exactly one Keycloak version release.
+      The item title must be the version number (e.g. "Keycloak 26.1.0").
+      The item link must point to the anchor for that version on the page.
+      The item description must be the release summary or first paragraph of that version's section.
+      Do not create items for sub-sections, individual bug fixes, or individual features within a release.

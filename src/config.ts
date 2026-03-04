@@ -6,6 +6,7 @@ const FeedSchema = z.object({
   id: z.string().min(1),
   name: z.string().min(1),
   url: z.string().url(),
+  prompt: z.string().optional(),
 });
 
 const ConfigSchema = z.object({

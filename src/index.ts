@@ -27,7 +27,7 @@ async function main(): Promise<void> {
 
       // Step 3: Call the LLM for structured extraction
       console.log(`[${feed.id}] Calling LLM for extraction…`);
-      const rawItems = await callLLM(cleaned, feed.name);
+      const rawItems = await callLLM(cleaned, feed.name, feed.prompt);
 
       // Step 4: Validate LLM output
       const items = validateItems(rawItems);

@@ -34,7 +34,8 @@ JSON schema:
  */
 export async function callLLM(
   cleanedHtml: string,
-  feedName: string
+  feedName: string,
+  feedPrompt?: string
 ): Promise<RawFeedItem[]> {
   const apiKey = process.env.GITHUB_TOKEN;
   if (!apiKey) {
@@ -45,6 +46,10 @@ export async function callLLM(
     baseURL: "https://models.inference.ai.azure.com",
     apiKey,
   });
+
+  const systemPrompt = feedPrompt
+    ? `${SYSTEM_PROMPT}\n\nAdditional instructions for this feed:\n${feedPrompt}`
+    : SYSTEM_PROMPT;
 
   const userPrompt = `Extract RSS feed items from the following HTML for a feed named "${feedName}".
 
@@ -59,7 +64,7 @@ ${cleanedHtml}`;
         model: MODEL,
         temperature: 0,
         messages: [
-          { role: "system", content: SYSTEM_PROMPT },
+          { role: "system", content: systemPrompt },
           { role: "user", content: userPrompt },
         ],
       });
