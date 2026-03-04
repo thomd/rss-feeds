@@ -19,7 +19,7 @@ export function generateRSS(
     site_url: feed.url,
     generator: "rss-feeds / GitHub Models",
     pubDate: new Date(),
-    ttl: 360, // matches the 6-hour refresh cycle
+    ttl: 1440, // matches the once-a-day refresh cycle
   });
 
   for (const item of items) {
