@@ -1,7 +1,9 @@
 import * as cheerio from "cheerio";
 
-/** Maximum character length of cleaned HTML sent to the LLM. */
-const MAX_CHARS = 80_000;
+/** Maximum character length of cleaned HTML sent to the LLM.
+ *  GitHub Models free tier caps gpt-4o-mini at 8,000 input tokens (~32,000 chars).
+ *  28,000 chars leaves ~500 tokens headroom for the system/user prompt wrapper. */
+const MAX_CHARS = 28_000;
 
 /**
  * Remove noise elements and return cleaned HTML string.
