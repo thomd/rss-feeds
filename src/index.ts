@@ -1,7 +1,7 @@
 import { loadConfig } from "./config";
 import { fetchPage } from "./fetchPage";
 import { cleanHtml } from "./cleanHtml";
-import { callLLM } from "./callLLM";
+import { callLLM, summarizeDescriptions } from "./callLLM";
 import { extractWithSelectors } from "./extractSelectors";
 import { validateItems } from "./validateItems";
 import { generateRSS } from "./generateRSS";
@@ -38,6 +38,15 @@ async function main(): Promise<void> {
 
       // Step 3: Validate extracted items
       const items = validateItems(rawItems);
+
+      // Step 4: For selector-based feeds, summarize descriptions via LLM
+      if (feed.selectors && items.length > 0) {
+        console.log(`[${feed.id}] Summarizing ${items.length} description(s) via LLM…`);
+        const summaries = await summarizeDescriptions(items.map((i) => i.description));
+        for (let i = 0; i < items.length; i++) {
+          items[i].description = summaries[i] ?? items[i].description;
+        }
+      }
       if (items.length === 0) {
         console.warn(
           `[${feed.id}] WARNING: No valid items extracted — feed will be empty`
