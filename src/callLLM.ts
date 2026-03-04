@@ -106,6 +106,9 @@ ${cleanedHtml}`;
   );
 }
 
+/** Max chars per description sent to the summarizer (keeps batch within token limits). */
+const SUMMARIZE_MAX_DESC_CHARS = 600;
+
 /**
  * Summarize an array of descriptions to one sentence each using the LLM.
  * All descriptions are batched into a single API call.
@@ -118,7 +121,12 @@ export async function summarizeDescriptions(
 
   const client = getClient();
 
-  const userPrompt = JSON.stringify(descriptions);
+  // Truncate each description so the combined batch stays within token limits
+  const truncated = descriptions.map((d) =>
+    d.length > SUMMARIZE_MAX_DESC_CHARS ? d.slice(0, SUMMARIZE_MAX_DESC_CHARS) + "…" : d
+  );
+
+  const userPrompt = JSON.stringify(truncated);
 
   let lastError: unknown;
 
@@ -142,16 +150,19 @@ export async function summarizeDescriptions(
 
       const parsed: unknown = JSON.parse(jsonText);
 
-      if (!Array.isArray(parsed) || parsed.length !== descriptions.length) {
-        throw new Error(
-          `Expected array of length ${descriptions.length}, got ${Array.isArray(parsed) ? parsed.length : typeof parsed}`
-        );
+      if (!Array.isArray(parsed)) {
+        throw new Error(`Expected JSON array, got ${typeof parsed}`);
       }
 
-      console.log(
-        `[summarizeDescriptions] Summarized ${parsed.length} description(s) on attempt ${attempt}`
+      // Map by index; fall back to original for any missing entries
+      const result = descriptions.map(
+        (original, i) => (typeof parsed[i] === "string" && parsed[i].trim() ? parsed[i] as string : original)
       );
-      return parsed as string[];
+
+      console.log(
+        `[summarizeDescriptions] Summarized ${result.length} description(s) on attempt ${attempt}`
+      );
+      return result;
     } catch (error) {
       lastError = error;
       console.warn(

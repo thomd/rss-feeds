@@ -1,12 +1,18 @@
 import { z } from "zod";
+import * as cheerio from "cheerio";
 
-// Raw shape from LLM (before validation)
+/** Strip HTML tags and decode entities from a string. */
+function stripHtml(value: string): string {
+  return cheerio.load(value).text().trim();
+}
+
+
 export type RawFeedItem = Record<string, unknown>;
 
 const FeedItemSchema = z.object({
   title: z.string().min(1),
   link: z.string().url(),
-  description: z.string().min(1),
+  description: z.string().min(1).transform(stripHtml),
   pubDate: z.string().nullish().transform((v) => v ?? undefined),
 });
 
