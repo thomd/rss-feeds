@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: write # Required to push updated feeds back to the repo
+  models: read    # Required to call the GitHub Models inference API
 
 jobs:
   generate:
