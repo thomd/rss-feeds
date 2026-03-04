@@ -7,7 +7,7 @@ const FeedItemSchema = z.object({
   title: z.string().min(1),
   link: z.string().url(),
   description: z.string().min(1),
-  pubDate: z.string().optional(),
+  pubDate: z.string().nullish().transform((v) => v ?? undefined),
 });
 
 export type FeedItem = z.infer<typeof FeedItemSchema>;
