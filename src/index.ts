@@ -2,6 +2,7 @@ import { loadConfig } from "./config";
 import { fetchPage } from "./fetchPage";
 import { cleanHtml } from "./cleanHtml";
 import { callLLM } from "./callLLM";
+import { extractWithSelectors } from "./extractSelectors";
 import { validateItems } from "./validateItems";
 import { generateRSS } from "./generateRSS";
 
@@ -21,15 +22,21 @@ async function main(): Promise<void> {
       console.log(`[${feed.id}] Fetching page…`);
       const html = await fetchPage(feed.url);
 
-      // Step 2: Clean HTML to reduce noise and token usage
-      console.log(`[${feed.id}] Cleaning HTML…`);
-      const cleaned = cleanHtml(html, feed.url);
+      // Step 2: Extract items — via CSS selectors if defined, otherwise via LLM
+      let rawItems;
+      if (feed.selectors) {
+        console.log(`[${feed.id}] Extracting with CSS selectors…`);
+        rawItems = extractWithSelectors(html, feed);
+      } else {
+        // Clean HTML to reduce noise and token usage before sending to LLM
+        console.log(`[${feed.id}] Cleaning HTML…`);
+        const cleaned = cleanHtml(html, feed.url);
 
-      // Step 3: Call the LLM for structured extraction
-      console.log(`[${feed.id}] Calling LLM for extraction…`);
-      const rawItems = await callLLM(cleaned, feed.name, feed.prompt);
+        console.log(`[${feed.id}] Calling LLM for extraction…`);
+        rawItems = await callLLM(cleaned, feed.name, feed.prompt);
+      }
 
-      // Step 4: Validate LLM output
+      // Step 3: Validate extracted items
       const items = validateItems(rawItems);
       if (items.length === 0) {
         console.warn(
@@ -37,7 +44,7 @@ async function main(): Promise<void> {
         );
       }
 
-      // Step 5: Generate and write the RSS file
+      // Step 4: Generate and write the RSS file
       const outputPath = generateRSS(feed, items);
       console.log(`[${feed.id}] ✓ Done → ${outputPath}`);
       successCount++;
