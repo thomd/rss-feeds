@@ -9,10 +9,6 @@ feeds:
       The item description must be the release summary or first paragraph of that version's section.
       Do not create items for sub-sections, individual bug fixes, or individual features within a release.
 
-# Example: use explicit CSS selectors instead of LLM extraction.
-# Define 'selectors' when the page structure is stable and the LLM results are unsatisfactory.
-# 'selectors' and 'prompt' are mutually exclusive — if 'selectors' is present, the LLM is skipped.
-#
   - id: keycloak-release-notes-css-selectors
     name: Keycloak Release Notes CSS Selectors
     url: https://www.keycloak.org/docs/latest/release_notes/index.html
