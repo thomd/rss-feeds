@@ -39,10 +39,14 @@ async function main(): Promise<void> {
       // Step 3: Validate extracted items
       const items = validateItems(rawItems).slice(0, feed.maxItems);
 
-      // Step 4: For selector-based feeds, summarize descriptions via LLM
-      if (feed.selectors && items.length > 0) {
+      // Step 4: For selector-based feeds with summarize enabled, summarize descriptions via LLM
+      const descriptionConfig = feed.selectors?.description;
+      const summarizePrompt =
+        typeof descriptionConfig === "object" ? descriptionConfig.prompt : undefined;
+
+      if (summarizePrompt && items.length > 0) {
         console.log(`[${feed.id}] Summarizing ${items.length} description(s) via LLM…`);
-        const summaries = await summarizeDescriptions(items.map((i) => i.description));
+        const summaries = await summarizeDescriptions(items.map((i) => i.description), summarizePrompt);
         for (let i = 0; i < items.length; i++) {
           items[i].description = summaries[i] ?? items[i].description;
         }

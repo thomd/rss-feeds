@@ -45,7 +45,7 @@ The LLM automatically detects the page structure and extracts items. Optional fi
 | `selectors.items` | CSS selector for the repeating item container |
 | `selectors.title` | CSS selector for the title (relative to item) |
 | `selectors.link` | CSS selector for the link (relative to item) |
-| `selectors.description` | CSS selector for the description (relative to item) |
+| `selectors.description` | CSS selector string, or `{ selector, prompt }` to transform via LLM using the given prompt |
 | `selectors.pubDate` | CSS selector for the date (relative to item, optional) |
 
 Use `selectors` instead of `prompt` when the page structure is stable and you want deterministic extraction without an LLM call. If `selectors` is defined, the LLM is used only to summarize descriptions.

@@ -35,9 +35,9 @@ JSON schema:
   }
 ]`;
 
-const SUMMARIZE_SYSTEM_PROMPT = `You are a technical writer that summarizes text into exactly one concise sentence.
+const SUMMARIZE_SYSTEM_PROMPT = `You are a technical writer. Summarize each description in a JSON array according to the given instructions.
 You will receive a JSON array of description strings.
-Return a JSON array of the same length, where each entry is the original description summarized to one sentence.
+Return a JSON array of the same length with each entry transformed as instructed.
 Output ONLY a valid JSON array of strings (no markdown, no explanation, no code fences).`;
 
 /**
@@ -115,7 +115,8 @@ const SUMMARIZE_MAX_DESC_CHARS = 600;
  * Falls back to the original descriptions if the LLM call fails.
  */
 export async function summarizeDescriptions(
-  descriptions: string[]
+  descriptions: string[],
+  prompt: string
 ): Promise<string[]> {
   if (descriptions.length === 0) return [];
 
@@ -126,7 +127,7 @@ export async function summarizeDescriptions(
     d.length > SUMMARIZE_MAX_DESC_CHARS ? d.slice(0, SUMMARIZE_MAX_DESC_CHARS) + "…" : d
   );
 
-  const userPrompt = JSON.stringify(truncated);
+  const userPrompt = `${prompt}\n\n${JSON.stringify(truncated)}`;
 
   let lastError: unknown;
 

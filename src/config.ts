@@ -2,13 +2,23 @@ import * as fs from "fs";
 import * as yaml from "js-yaml";
 import { z } from "zod";
 
+const DescriptionSelectorSchema = z.union([
+  z.string(), // plain CSS selector — no summarization
+  z.object({
+    selector: z.string(), // CSS selector for the description text
+    prompt: z.string(),   // summarize via LLM using this prompt
+  }),
+]);
+
 const SelectorsSchema = z.object({
-  items: z.string(),       // CSS selector for the repeating item container
-  title: z.string(),       // CSS selector (relative to item) for the title text
-  link: z.string(),        // CSS selector (relative to item) for the link href
-  description: z.string(), // CSS selector (relative to item) for the description text
-  pubDate: z.string().optional(), // CSS selector (relative to item) for the date (optional)
+  items: z.string(),
+  title: z.string(),
+  link: z.string(),
+  description: DescriptionSelectorSchema,
+  pubDate: z.string().optional(),
 });
+
+export type DescriptionSelectorConfig = z.infer<typeof DescriptionSelectorSchema>;
 
 const FeedSchema = z.object({
   id: z.string().min(1),

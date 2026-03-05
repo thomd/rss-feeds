@@ -16,4 +16,14 @@ feeds:
       items: ".sect1"
       title: ".sect1 h2"
       link: ".sect1 h2 a"
-      description: ".sect1 .sectionbody"
+      description:
+        selector: ".sect1 .sectionbody"
+        prompt: "Summarize the following release notes to one sentence."
+
+# Example: plain string (no summarization)
+#    selectors:
+#      items: "article.news-item"
+#      title: "h2.title"
+#      link: "a.read-more"
+#      description: "p.summary"
+#      pubDate: "time"

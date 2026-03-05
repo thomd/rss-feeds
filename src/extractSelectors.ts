@@ -32,7 +32,11 @@ export function extractWithSelectors(
       }
     }
 
-    const description = item.find(selectors.description).first().text().trim();
+    const descSelector =
+      typeof selectors.description === "string"
+        ? selectors.description
+        : selectors.description.selector;
+    const description = item.find(descSelector).first().text().trim();
 
     let pubDate: string | null = null;
     if (selectors.pubDate) {
